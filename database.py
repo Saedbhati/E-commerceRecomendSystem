@@ -60,7 +60,7 @@ def homeRecommendation(clicked_product_ids, limit=10):
         },
         {
             "$project": {
-                "plot_embedding": 0  # Exclude plot_embedding from results
+                "plot_embedding": 0  
             }
         }
     ])
