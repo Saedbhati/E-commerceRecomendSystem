@@ -1,11 +1,9 @@
 import pymongo
 import os
-from sentence_transformers import SentenceTransformer
 from bson import ObjectId
 import numpy as np
 
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
 
 mongodb_url = ""
 
@@ -32,7 +30,7 @@ def vectorSearch(title,limit=10):
         "$vectorSearch": {
         "index": "vector_index",
         "path": "plot_embedding",
-        "queryVector": model.encode(title).tolist(),
+        "queryVector": title,
         "numCandidates": 100,
         "limit": limit
         }

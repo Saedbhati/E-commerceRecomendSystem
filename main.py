@@ -30,7 +30,7 @@ def product(id):
 
     if id not in clicked_product:
         clicked_product.append(id)
-    recommend = vectorSearch(product_data['product_name'])
+    recommend = vectorSearch(product_data['plot_embedding'])
     res = make_response(render_template('product.html', id=id, data=product_data, recommend=recommend))
     
     # Update the cookie with the new clicked_product list
