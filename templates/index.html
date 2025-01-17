@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Recommendations</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0 40px;  /* Added side margins */
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #fff;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 0 -40px 2rem -40px; /* Negative margin to extend header full width */
+        }
+
+        .header h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        /* Section headers */
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+        }
+
+        /* Recommendations container */
+        .recommend-container {
+            padding: 2rem 0;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .recommendations-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 2rem;
+            padding: 1rem 0.5rem;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .recommendations-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .recommendations-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .recommendations-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        /* Product card styles */
+        .product-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            width: 350px;  /* Increased width */
+            flex-shrink: 0;
+        }
+
+        .product-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+
+        .product-container img {
+            width: 100%;
+            height: 300px;  /* Increased height */
+            object-fit: contain;  /* Changed to contain */
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;  /* Reduced to 1 line */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 1.6rem;  /* Adjusted height */
+        }
+
+        .product-info p {
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;  /* Reduced to 2 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.2rem;  /* Adjusted height */
+        }
+
+        .price {
+            font-size: 1.4rem;
+            color: #2ecc71;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: transform 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .view-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Products grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));  /* Adjusted minimum width */
+            gap: 2rem;
+            padding: 2rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            body {
+                margin: 0 20px;  /* Reduced margin for tablets */
+            }
+            
+            .header {
+                margin: 0 -20px 2rem -20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                margin: 0 10px;  /* Further reduced margin for mobile */
+            }
+            
+            .header {
+                margin: 0 -10px 2rem -10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .product-container {
+                width: 300px;  /* Smaller cards for mobile */
+            }
+
+            .product-container img {
+                height: 250px;  /* Smaller images for mobile */
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                padding: 1rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-container {
+                width: 280px;
+            }
+
+            .product-container img {
+                height: 200px;
+            }
+
+            .product-info h2 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Amazing Products</h1>
+    </header>
+
+    <!-- Recommended Products -->
+    {% if home_recommend != {} %}
+    <section class="recommend-container">
+        <h2 class="section-title">Recommended For You</h2>
+        <div class="recommendations-scroll">
+            {% for product in home_recommend %}
+            <div class="product-container">
+                <img src="{{ product.product_imgUrl }}" alt="{{ product.product_name }}">
+                <div class="product-info">
+                    <h2>{{ product.product_name }}</h2>
+                    <p>{{ product.product_description }}</p>
+                    <div class="price">${{ product.product_price }}</div>
+                    <a href="/product/{{ product.product_id }}" class="view-button">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- All Products -->
+    <section>
+        <h2 class="section-title">All Products</h2>
+        <div class="product-grid">
+            {% for product in data %}
+            <div class="product-container">
+                <img src="{{ product.product_imgUrl }}" alt="{{ product.product_name }}">
+                <div class="product-info">
+                    <h2>{{ product.product_name }}</h2>
+                    <p>{{ product.product_description }}</p>
+                    <div class="price">${{ product.product_price }}</div>
+                    <a href="/product/{{ product.product_id }}" class="view-button">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.env
+*.csv
+*.ipynb
+__pycache__/
+.vscode/

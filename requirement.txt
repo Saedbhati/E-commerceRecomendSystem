@@ -1,0 +1,5 @@
+pymongo
+sentence_transformers
+bson
+numpy
+flask
